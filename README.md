@@ -1,4 +1,4 @@
-# Python Blocking Analyzer
+# Bloky
 
 A Python tool that analyzes Python code to detect blocking operations that could impact performance in async contexts.
 
@@ -22,29 +22,29 @@ pip install -e .
 ### Install from PyPI (when published)
 
 ```bash
-pip install blocking-analyzer
+pip install bloky
 ```
 
 ## Usage
 
-After installation, you can use the `blocking-analyzer` command from anywhere:
+After installation, you can use the `bloky` command from anywhere:
 
 ### Analyze a directory
 
 ```bash
-blocking-analyzer /path/to/your/project
+bloky /path/to/your/project
 ```
 
 ### Analyze a single file
 
 ```bash
-blocking-analyzer /path/to/file.py
+bloky /path/to/file.py
 ```
 
 ### Save report to file
 
 ```bash
-blocking-analyzer /path/to/project --output blocking_report.txt
+bloky /path/to/project --output blocking_report.txt
 ```
 
 ### Alternative: Run directly without installation
@@ -66,7 +66,7 @@ The analyzer detects several types of blocking operations:
 
 ## Example Output
 
-```
+```console
 🚨 BLOCKING OPERATIONS DETECTED
 ==================================================
 
