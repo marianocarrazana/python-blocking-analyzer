@@ -42,6 +42,7 @@ class BlockingAnalyzer(ast.NodeVisitor):
         self.current_function = None
         self.current_class = None
         self.imports = {}
+        self.in_await_context = False
 
     def visit_Import(self, node: ast.Import):
         """Track import statements."""
@@ -77,12 +78,21 @@ class BlockingAnalyzer(ast.NodeVisitor):
         self.generic_visit(node)
         self.current_class = old_class
 
+    def visit_Await(self, node: ast.Await):
+        """Track await context to avoid false positives."""
+        old_in_await = self.in_await_context
+        self.in_await_context = True
+        self.generic_visit(node)
+        self.in_await_context = old_in_await
+
     def visit_Call(self, node: ast.Call):
         """Detect blocking function calls."""
-        self._check_boto3_calls(node)
-        self._check_database_calls(node)
-        self._check_file_operations(node)
-        self._check_network_calls(node)
+        # Don't report issues if we're in an await context
+        if not self.in_await_context:
+            self._check_boto3_calls(node)
+            self._check_database_calls(node)
+            self._check_file_operations(node)
+            self._check_network_calls(node)
         self.generic_visit(node)
 
     def _check_boto3_calls(self, node: ast.Call):
